@@ -1,0 +1,6 @@
+{
+  "name": "Harmony Interior Business Management System",
+  "description": "Sistem manajemen operasional made-to-order untuk usaha gorden custom dan window treatment Harmony Interior.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,563 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Pengguna aplikasi Harmony Interior beserta role dan status akses.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "displayName": { "type": "string", "maxLength": 120 },
+        "email": { "type": "string", "maxLength": 200 },
+        "phone": { "type": "string", "maxLength": 40 },
+        "photoURL": { "type": "string", "maxLength": 1000 },
+        "role": {
+          "type": "string",
+          "enum": ["owner", "admin", "sales", "surveyor", "operations", "finance", "installer"]
+        },
+        "active": { "type": "boolean" },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "ownerUid", "displayName", "email", "role", "active", "createdAt", "updatedAt"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Data pelanggan Harmony Interior beserta alamat dan lokasi pemasangan.",
+      "type": "object",
+      "properties": {
+        "customerCode": { "type": "string", "maxLength": 40 },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "name": { "type": "string", "maxLength": 160 },
+        "whatsapp": { "type": "string", "maxLength": 40 },
+        "altPhone": { "type": "string", "maxLength": 40 },
+        "email": { "type": "string", "maxLength": 200 },
+        "address": { "type": "string", "maxLength": 500 },
+        "city": { "type": "string", "maxLength": 100 },
+        "installationLocation": { "type": "string", "maxLength": 500 },
+        "propertyType": { "type": "string", "enum": ["rumah", "apartemen", "kantor", "hotel", "lainnya"] },
+        "source": { "type": "string", "enum": ["Instagram", "WhatsApp", "Referral", "Walk-in", "Lainnya"] },
+        "firstContactDate": { "type": "string", "maxLength": 30 },
+        "notes": { "type": "string", "maxLength": 2000 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["customerCode", "ownerUid", "name", "whatsapp", "propertyType", "source", "createdBy", "createdAt", "updatedAt"]
+    },
+    "Lead": {
+      "title": "Lead",
+      "description": "Calon pelanggan dan riwayat follow-up sebelum konversi ke pelanggan/order.",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "name": { "type": "string", "maxLength": 160 },
+        "whatsapp": { "type": "string", "maxLength": 40 },
+        "source": { "type": "string", "maxLength": 60 },
+        "needs": { "type": "string", "maxLength": 1500 },
+        "estimatedValue": { "type": "number" },
+        "nextFollowUpDate": { "type": "string", "maxLength": 30 },
+        "status": {
+          "type": "string",
+          "enum": ["New Lead", "Contacted", "Survey Scheduled", "Survey Completed", "Quotation Sent", "Negotiation", "Won", "Lost"]
+        },
+        "lostReason": { "type": "string", "maxLength": 500 },
+        "communicationNotes": { "type": "string", "maxLength": 2000 },
+        "followUpHistory": { "type": "array" },
+        "convertedCustomerId": { "type": "string", "maxLength": 128 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUid", "name", "whatsapp", "source", "status", "createdBy", "createdAt", "updatedAt"]
+    },
+    "Survey": {
+      "title": "Survey",
+      "description": "Jadwal dan hasil survey lapangan untuk pengukuran proyek.",
+      "type": "object",
+      "properties": {
+        "surveyCode": { "type": "string", "maxLength": 40 },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "customerId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "customerName": { "type": "string", "maxLength": 160 },
+        "projectName": { "type": "string", "maxLength": 200 },
+        "locationAddress": { "type": "string", "maxLength": 500 },
+        "surveyDate": { "type": "string", "maxLength": 30 },
+        "surveyTime": { "type": "string", "maxLength": 20 },
+        "surveyor": { "type": "string", "maxLength": 120 },
+        "status": { "type": "string", "enum": ["Scheduled", "In Progress", "Completed", "Rescheduled", "Cancelled"] },
+        "fieldNotes": { "type": "string", "maxLength": 2000 },
+        "photoUrls": { "type": "array" },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["surveyCode", "ownerUid", "customerId", "customerName", "projectName", "surveyDate", "status", "createdBy", "createdAt", "updatedAt"]
+    },
+    "MeasurementArea": {
+      "title": "MeasurementArea",
+      "description": "Detail pengukuran per ruangan dan bidang jendela pada suatu survey.",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "surveyId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "customerId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "roomName": { "type": "string", "maxLength": 120 },
+        "windowName": { "type": "string", "maxLength": 120 },
+        "widthCm": { "type": "number" },
+        "heightCm": { "type": "number" },
+        "quantity": { "type": "number" },
+        "curtainType": { "type": "string", "maxLength": 100 },
+        "model": { "type": "string", "maxLength": 100 },
+        "fabricType": { "type": "string", "maxLength": 120 },
+        "color": { "type": "string", "maxLength": 100 },
+        "pattern": { "type": "string", "maxLength": 100 },
+        "railType": { "type": "string", "maxLength": 120 },
+        "accessories": { "type": "string", "maxLength": 300 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "photoUrl": { "type": "string", "maxLength": 1000 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUid", "surveyId", "customerId", "roomName", "windowName", "widthCm", "heightCm", "quantity", "createdBy", "createdAt", "updatedAt"]
+    },
+    "Quotation": {
+      "title": "Quotation",
+      "description": "Penawaran harga (quotation) gorden custom multi-ruangan dan multi-produk.",
+      "type": "object",
+      "properties": {
+        "quotationNumber": { "type": "string", "maxLength": 50 },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "customerId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "customerName": { "type": "string", "maxLength": 160 },
+        "customerWhatsapp": { "type": "string", "maxLength": 40 },
+        "surveyId": { "type": "string", "maxLength": 128 },
+        "projectName": { "type": "string", "maxLength": 200 },
+        "quotationDate": { "type": "string", "maxLength": 30 },
+        "validUntil": { "type": "string", "maxLength": 30 },
+        "revisionNumber": { "type": "number" },
+        "items": { "type": "array" },
+        "subtotal": { "type": "number" },
+        "discount": { "type": "number" },
+        "surveyFee": { "type": "number" },
+        "installationFee": { "type": "number" },
+        "transportFee": { "type": "number" },
+        "additionalFee": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "dpPercentage": { "type": "number" },
+        "dpAmount": { "type": "number" },
+        "remainingAmount": { "type": "number" },
+        "paymentTerms": { "type": "string", "maxLength": 1000 },
+        "notes": { "type": "string", "maxLength": 2000 },
+        "status": {
+          "type": "string",
+          "enum": ["Draft", "Sent", "Viewed", "Revision", "Approved", "Rejected", "Expired"]
+        },
+        "revisionHistory": { "type": "array" },
+        "convertedOrderId": { "type": "string", "maxLength": 128 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["quotationNumber", "ownerUid", "customerId", "customerName", "projectName", "quotationDate", "totalAmount", "status", "createdBy", "createdAt", "updatedAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Pesanan utama pelanggan (made-to-order) beserta workflow status dan timeline.",
+      "type": "object",
+      "properties": {
+        "orderNumber": { "type": "string", "maxLength": 50 },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "customerId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "customerName": { "type": "string", "maxLength": 160 },
+        "customerWhatsapp": { "type": "string", "maxLength": 40 },
+        "quotationId": { "type": "string", "maxLength": 128 },
+        "quotationNumber": { "type": "string", "maxLength": 50 },
+        "surveyId": { "type": "string", "maxLength": 128 },
+        "projectName": { "type": "string", "maxLength": 200 },
+        "installationAddress": { "type": "string", "maxLength": 500 },
+        "orderDate": { "type": "string", "maxLength": 30 },
+        "targetCompletionDate": { "type": "string", "maxLength": 30 },
+        "targetInstallationDate": { "type": "string", "maxLength": 30 },
+        "items": { "type": "array" },
+        "totalAmount": { "type": "number" },
+        "dpAmount": { "type": "number" },
+        "estimatedCost": { "type": "number" },
+        "status": {
+          "type": "string",
+          "enum": [
+            "New Order",
+            "Waiting for DP",
+            "Confirmed",
+            "Procurement Needed",
+            "PO Sent to Supplier",
+            "Material Ordered",
+            "Material Received",
+            "Production / Sewing",
+            "Quality Control",
+            "Ready for Installation",
+            "Installation Scheduled",
+            "Installation in Progress",
+            "Completed",
+            "Closed",
+            "On Hold",
+            "Cancelled"
+          ]
+        },
+        "timeline": { "type": "array" },
+        "notes": { "type": "string", "maxLength": 2000 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["orderNumber", "ownerUid", "customerId", "customerName", "projectName", "orderDate", "totalAmount", "status", "createdBy", "createdAt", "updatedAt"]
+    },
+    "Supplier": {
+      "title": "Supplier",
+      "description": "Data supplier kain, pabrik gorden, aksesoris, rel, dan workshop penjahitan.",
+      "type": "object",
+      "properties": {
+        "supplierCode": { "type": "string", "maxLength": 40 },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "name": { "type": "string", "maxLength": 160 },
+        "contactPerson": { "type": "string", "maxLength": 120 },
+        "whatsapp": { "type": "string", "maxLength": 40 },
+        "address": { "type": "string", "maxLength": 500 },
+        "category": { "type": "string", "maxLength": 100 },
+        "bankInfo": { "type": "string", "maxLength": 300 },
+        "notes": { "type": "string", "maxLength": 2000 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["supplierCode", "ownerUid", "name", "whatsapp", "category", "createdBy", "createdAt", "updatedAt"]
+    },
+    "PurchaseOrder": {
+      "title": "PurchaseOrder",
+      "description": "Purchase Order berbasis pesanan pelanggan (Order-Based Procurement, tanpa gudang stok).",
+      "type": "object",
+      "properties": {
+        "poNumber": { "type": "string", "maxLength": 50 },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "orderId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "orderNumber": { "type": "string", "maxLength": 50 },
+        "customerName": { "type": "string", "maxLength": 160 },
+        "supplierId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "supplierName": { "type": "string", "maxLength": 160 },
+        "supplierWhatsapp": { "type": "string", "maxLength": 40 },
+        "poDate": { "type": "string", "maxLength": 30 },
+        "targetArrivalDate": { "type": "string", "maxLength": 30 },
+        "receivedDate": { "type": "string", "maxLength": 30 },
+        "items": { "type": "array" },
+        "subtotal": { "type": "number" },
+        "shippingCost": { "type": "number" },
+        "additionalCost": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "status": {
+          "type": "string",
+          "enum": ["Draft", "Approved", "Sent", "Confirmed by Supplier", "In Process", "Ready", "Shipped", "Received", "Partial Received", "Cancelled"]
+        },
+        "delayNotes": { "type": "string", "maxLength": 1000 },
+        "notes": { "type": "string", "maxLength": 2000 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["poNumber", "ownerUid", "orderId", "orderNumber", "supplierId", "supplierName", "poDate", "totalAmount", "status", "createdBy", "createdAt", "updatedAt"]
+    },
+    "ProductionJob": {
+      "title": "ProductionJob",
+      "description": "Pelacakan proses produksi dan penjahitan di workshop/pabrik.",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "orderId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "orderNumber": { "type": "string", "maxLength": 50 },
+        "customerName": { "type": "string", "maxLength": 160 },
+        "supplierId": { "type": "string", "maxLength": 128 },
+        "workshopName": { "type": "string", "maxLength": 160 },
+        "itemSummary": { "type": "string", "maxLength": 300 },
+        "specification": { "type": "string", "maxLength": 1000 },
+        "status": {
+          "type": "string",
+          "enum": ["Not Started", "Material Preparation", "Cutting", "Sewing", "Finishing", "Quality Check", "Ready", "Delayed"]
+        },
+        "startDate": { "type": "string", "maxLength": 30 },
+        "estimatedFinishDate": { "type": "string", "maxLength": 30 },
+        "actualFinishDate": { "type": "string", "maxLength": 30 },
+        "notes": { "type": "string", "maxLength": 2000 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUid", "orderId", "orderNumber", "workshopName", "itemSummary", "status", "createdBy", "createdAt", "updatedAt"]
+    },
+    "Installation": {
+      "title": "Installation",
+      "description": "Jadwal pemasangan lapangan dan checklist serah terima.",
+      "type": "object",
+      "properties": {
+        "installationCode": { "type": "string", "maxLength": 40 },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "orderId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "orderNumber": { "type": "string", "maxLength": 50 },
+        "customerId": { "type": "string", "maxLength": 128 },
+        "customerName": { "type": "string", "maxLength": 160 },
+        "customerWhatsapp": { "type": "string", "maxLength": 40 },
+        "address": { "type": "string", "maxLength": 500 },
+        "scheduledDate": { "type": "string", "maxLength": 30 },
+        "scheduledTime": { "type": "string", "maxLength": 20 },
+        "installerName": { "type": "string", "maxLength": 120 },
+        "transportInfo": { "type": "string", "maxLength": 200 },
+        "status": {
+          "type": "string",
+          "enum": ["Scheduled", "Confirmed", "On the Way", "In Progress", "Completed", "Rescheduled", "Cancelled"]
+        },
+        "checklist": { "type": "object" },
+        "notes": { "type": "string", "maxLength": 2000 },
+        "beforePhotoUrl": { "type": "string", "maxLength": 1000 },
+        "afterPhotoUrl": { "type": "string", "maxLength": 1000 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["installationCode", "ownerUid", "orderId", "orderNumber", "customerName", "scheduledDate", "status", "createdBy", "createdAt", "updatedAt"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Pencatatan pembayaran pelanggan terkait order (DP, Termin, Pelunasan, Refund).",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "orderId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "orderNumber": { "type": "string", "maxLength": 50 },
+        "customerId": { "type": "string", "maxLength": 128 },
+        "customerName": { "type": "string", "maxLength": 160 },
+        "paymentDate": { "type": "string", "maxLength": 30 },
+        "amount": { "type": "number" },
+        "paymentType": { "type": "string", "enum": ["DP", "Termin", "Pelunasan", "Additional payment", "Refund"] },
+        "method": { "type": "string", "enum": ["Cash", "Transfer bank", "QRIS", "Other"] },
+        "proofUrl": { "type": "string", "maxLength": 1000 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUid", "orderId", "orderNumber", "customerName", "paymentDate", "amount", "paymentType", "method", "createdBy", "createdAt", "updatedAt"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "Pengeluaran operasional dan pembelian bahan bisnis.",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "expenseDate": { "type": "string", "maxLength": 30 },
+        "category": { "type": "string", "maxLength": 100 },
+        "amount": { "type": "number" },
+        "description": { "type": "string", "maxLength": 500 },
+        "orderId": { "type": "string", "maxLength": 128 },
+        "orderNumber": { "type": "string", "maxLength": 50 },
+        "poId": { "type": "string", "maxLength": 128 },
+        "method": { "type": "string", "enum": ["Cash", "Transfer bank", "QRIS", "Other"] },
+        "proofUrl": { "type": "string", "maxLength": 1000 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUid", "expenseDate", "category", "amount", "description", "method", "createdBy", "createdAt", "updatedAt"]
+    },
+    "TaskItem": {
+      "title": "TaskItem",
+      "description": "Tugas operasional dan pengingat harian pemilik atau tim.",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "title": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 1500 },
+        "dueDate": { "type": "string", "maxLength": 30 },
+        "priority": { "type": "string", "enum": ["Low", "Normal", "High", "Urgent"] },
+        "status": { "type": "string", "enum": ["To Do", "In Progress", "Done", "Cancelled"] },
+        "assignedTo": { "type": "string", "maxLength": 120 },
+        "relatedType": { "type": "string", "maxLength": 40 },
+        "relatedId": { "type": "string", "maxLength": 128 },
+        "relatedLabel": { "type": "string", "maxLength": 200 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUid", "title", "dueDate", "priority", "status", "createdBy", "createdAt", "updatedAt"]
+    },
+    "DocumentRecord": {
+      "title": "DocumentRecord",
+      "description": "Arsip dokumen dan foto yang disimpan di Firebase Storage atau tautan terverifikasi.",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "title": { "type": "string", "maxLength": 200 },
+        "category": {
+          "type": "string",
+          "enum": ["Quotation", "Purchase Order", "Invoice", "Bukti Pembayaran", "Foto Survey", "Foto Produk", "Foto Pemasangan", "Dokumen Customer", "Dokumen Supplier", "Lainnya"]
+        },
+        "fileName": { "type": "string", "maxLength": 255 },
+        "mimeType": { "type": "string", "maxLength": 120 },
+        "sizeBytes": { "type": "number" },
+        "storagePath": { "type": "string", "maxLength": 500 },
+        "downloadUrl": { "type": "string", "maxLength": 1500 },
+        "relatedType": { "type": "string", "maxLength": 40 },
+        "relatedId": { "type": "string", "maxLength": 128 },
+        "relatedLabel": { "type": "string", "maxLength": 200 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUid", "title", "category", "fileName", "downloadUrl", "createdBy", "createdAt", "updatedAt"]
+    },
+    "ActivityLog": {
+      "title": "ActivityLog",
+      "description": "Jejak audit aktivitas operasional bisnis.",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "action": { "type": "string", "maxLength": 120 },
+        "entityType": { "type": "string", "maxLength": 60 },
+        "entityId": { "type": "string", "maxLength": 128 },
+        "summary": { "type": "string", "maxLength": 500 },
+        "actorUid": { "type": "string", "maxLength": 128 },
+        "actorName": { "type": "string", "maxLength": 120 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUid", "action", "entityType", "summary", "actorUid", "actorName", "createdAt", "updatedAt"]
+    },
+    "BusinessSettings": {
+      "title": "BusinessSettings",
+      "description": "Pengaturan profil usaha, rekening bank, kategori, dan format penomoran Harmony Interior.",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "businessName": { "type": "string", "maxLength": 160 },
+        "tagline": { "type": "string", "maxLength": 200 },
+        "address": { "type": "string", "maxLength": 500 },
+        "whatsapp": { "type": "string", "maxLength": 40 },
+        "email": { "type": "string", "maxLength": 200 },
+        "bankAccounts": { "type": "string", "maxLength": 1000 },
+        "paymentTerms": { "type": "string", "maxLength": 1500 },
+        "defaultDpPercentage": { "type": "number" },
+        "quotationValidityDays": { "type": "number" },
+        "orderPrefix": { "type": "string", "maxLength": 20 },
+        "quotationPrefix": { "type": "string", "maxLength": 20 },
+        "poPrefix": { "type": "string", "maxLength": 20 },
+        "productCategories": { "type": "array" },
+        "supplierCategories": { "type": "array" },
+        "expenseCategories": { "type": "array" },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUid", "businessName", "defaultDpPercentage", "quotationValidityDays", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Profil pengguna dan peran RBAC Harmony Interior."
+    },
+    "/customers/{customerId}": {
+      "schema": { "$ref": "#/entities/Customer" },
+      "description": "Database pelanggan CRM."
+    },
+    "/leads/{leadId}": {
+      "schema": { "$ref": "#/entities/Lead" },
+      "description": "Calon pelanggan dan follow-up."
+    },
+    "/surveys/{surveyId}": {
+      "schema": { "$ref": "#/entities/Survey" },
+      "description": "Data survey lokasi pelanggan."
+    },
+    "/measurementAreas/{areaId}": {
+      "schema": { "$ref": "#/entities/MeasurementArea" },
+      "description": "Detail pengukuran per ruangan dan bidang jendela."
+    },
+    "/quotations/{quotationId}": {
+      "schema": { "$ref": "#/entities/Quotation" },
+      "description": "Estimasi harga dan penawaran pelanggan."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Pesanan utama pelanggan made-to-order."
+    },
+    "/suppliers/{supplierId}": {
+      "schema": { "$ref": "#/entities/Supplier" },
+      "description": "Daftar supplier kain, aksesoris, rel, dan workshop."
+    },
+    "/purchaseOrders/{poId}": {
+      "schema": { "$ref": "#/entities/PurchaseOrder" },
+      "description": "Purchase order berbasis pesanan pelanggan."
+    },
+    "/productionJobs/{jobId}": {
+      "schema": { "$ref": "#/entities/ProductionJob" },
+      "description": "Tracking proses produksi dan penjahitan."
+    },
+    "/installations/{installationId}": {
+      "schema": { "$ref": "#/entities/Installation" },
+      "description": "Jadwal pemasangan dan checklist serah terima."
+    },
+    "/payments/{paymentId}": {
+      "schema": { "$ref": "#/entities/Payment" },
+      "description": "Pencatatan pembayaran pelanggan."
+    },
+    "/expenses/{expenseId}": {
+      "schema": { "$ref": "#/entities/Expense" },
+      "description": "Pencatatan pengeluaran operasional dan bahan."
+    },
+    "/tasks/{taskId}": {
+      "schema": { "$ref": "#/entities/TaskItem" },
+      "description": "Tugas operasional dan pengingat."
+    },
+    "/documents/{docId}": {
+      "schema": { "$ref": "#/entities/DocumentRecord" },
+      "description": "Arsip dokumen dan foto proyek."
+    },
+    "/activityLogs/{logId}": {
+      "schema": { "$ref": "#/entities/ActivityLog" },
+      "description": "Log aktivitas dan audit trail."
+    },
+    "/settings/{settingId}": {
+      "schema": { "$ref": "#/entities/BusinessSettings" },
+      "description": "Konfigurasi bisnis Harmony Interior."
+    }
+  }
+}
